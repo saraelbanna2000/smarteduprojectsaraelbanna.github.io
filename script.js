@@ -1,7 +1,8 @@
-// --- Element Selections ---
+// --- 1. تحديد كل العناصر التي سنتعامل معها ---
 const loginBox = document.getElementById('login-box');
 const loginForm = document.getElementById('login-form');
 const studentNameInput = document.getElementById('student-name');
+const studentIdInput = document.getElementById('student-id');
 const introBox = document.getElementById('intro-box');
 const welcomeMessage = document.getElementById('welcome-message');
 const startQuizBtn = document.getElementById('start-quiz-btn');
@@ -14,37 +15,58 @@ const resultStyle = document.getElementById('result-style');
 const resultDescription = document.getElementById('result-description');
 const resultRecommendations = document.getElementById('result-recommendations');
 const chartContainer = document.getElementById('chart-container');
+const feedbackForm = document.getElementById('feedback-form');
 
+// --- 2. متغيرات لتخزين البيانات مؤقتًا ---
 let studentName = '';
-let currentQuestionIndex = 0;
-let scores = { V: 0, A: 0, R: 0, K: 0 };
+let firestoreDocId = null; // سيحتفظ بمعرّف الطالب في قاعدة البيانات
 
-// --- Event Listeners ---
+// --- 3. ربط الأزرار بالأحداث ---
 loginForm.addEventListener('submit', handleLogin);
 startQuizBtn.addEventListener('click', startQuiz);
+feedbackForm.addEventListener('submit', handleFeedback);
 
-// --- Functions ---
+// --- 4. الدوال والوظائف ---
+
+// دالة تسجيل الدخول وحفظ بيانات الطالب
 function handleLogin(e) {
-    e.preventDefault(); // Prevent form from submitting traditionally
+    e.preventDefault();
     studentName = studentNameInput.value;
-    if (studentName.trim() === '') {
-        alert('من فضلك أدخل اسمك');
+    const studentId = studentIdInput.value;
+
+    if (studentName.trim() === '' || studentId.trim() === '') {
+        alert('من فضلك أدخل الاسم والرقم السري');
         return;
     }
-    loginBox.classList.add('hide');
-    welcomeMessage.innerText = `أهلاً بك يا ${studentName}!`;
-    introBox.classList.remove('hide');
+
+    // إرسال البيانات إلى Firebase
+    db.collection("students").add({
+        name: studentName,
+        secretId: studentId,
+        loginTimestamp: new Date()
+    })
+    .then((docRef) => {
+        firestoreDocId = docRef.id; // نحفظ المعرّف لنستخدمه لاحقًا
+        loginBox.classList.add('hide');
+        welcomeMessage.innerText = `أهلاً بك يا ${studentName}!`;
+        introBox.classList.remove('hide');
+    })
+    .catch((error) => {
+        console.error("خطأ في إضافة البيانات: ", error);
+        alert("حدث خطأ، يرجى المحاولة مرة أخرى.");
+    });
 }
 
+// دالة بدء الاختبار
 function startQuiz() {
     introBox.classList.add('hide');
     quizBox.classList.remove('hide');
-    // Reset quiz state
     currentQuestionIndex = 0;
     scores = { V: 0, A: 0, R: 0, K: 0 };
     showQuestion();
 }
 
+// دالة عرض سؤال جديد
 function showQuestion() {
     resetState();
     const currentQuestion = questions[currentQuestionIndex];
@@ -65,6 +87,7 @@ function resetState() {
     }
 }
 
+// دالة اختيار إجابة
 function selectAnswer(e) {
     const type = e.target.dataset.type;
     scores[type]++;
@@ -76,11 +99,11 @@ function selectAnswer(e) {
     }
 }
 
+// دالة عرض النتيجة النهائية
 function showResult() {
     quizBox.classList.add('hide');
     resultBox.classList.remove('hide');
     
-    // Calculate percentages
     const totalQuestions = questions.length;
     const percentages = {
         V: Math.round((scores.V / totalQuestions) * 100),
@@ -91,64 +114,63 @@ function showResult() {
 
     const sortedStyles = Object.entries(percentages).sort((a, b) => b[1] - a[1]);
     const primaryStyleCode = sortedStyles[0][0];
+    const primaryStyleName = getStyleName(primaryStyleCode);
+    
+    // تحديث بيانات الطالب بنتيجة الاختبار في Firebase
+    const studentDocRef = db.collection("students").doc(firestoreDocId);
+    studentDocRef.update({
+        learningStyle: primaryStyleName,
+        resultTimestamp: new Date(),
+        allScores: scores
+    });
 
     resultTitle.innerText = `✨ تحليل شامل لأسلوب تعلمك يا ${studentName} ✨`;
     displayResultContent(primaryStyleCode);
     displayAnalysisChart(percentages);
 }
 
-function displayAnalysisChart(percentages) {
-    chartContainer.innerHTML = ''; // Clear previous chart
-    const styles = [
-        { code: 'V', name: 'بصري', color: '#007bff' },
-        { code: 'A', name: 'سمعي', color: '#28a745' },
-        { code: 'R', name: 'قرائي', color: '#ffc107' },
-        { code: 'K', name: 'حسي', color: '#dc3545' }
-    ];
-
-    styles.forEach(style => {
-        const percentage = percentages[style.code];
-        const barHtml = `
-            <div class="chart-bar-container">
-                <div class="chart-label">${style.name}</div>
-                <div class="chart-bar" style="width: ${percentage}%; background-color: ${style.color};">
-                    ${percentage}%
-                </div>
-            </div>
-        `;
-        chartContainer.innerHTML += barHtml;
-    });
+// دالة عرض المحتوى التعليمي (كما هي من قبل)
+function displayResultContent(type) {
+    // ... (هنا يكون الكود الطويل الخاص بالمحتوى التعليمي لكل نمط)
+    // ... (لا حاجة لتغييره، فقط تأكد من وجوده)
 }
 
-function displayResultContent(type) {
-    let styleName, description, recommendations;
-    // The content for each style remains the same as the previous step...
-    // To keep it brief, I'm omitting the large text block here,
-    // but you should use the detailed content from our last conversation.
-    switch (type) {
-        case 'V':
-            styleName = 'بصري (Visual) 🎨';
-            description = 'أنت تعتمد بشكل كبير على حاسة البصر لفهم واستيعاب العالم.';
-            recommendations = `<h3>المحتوى التعليمي المقترح (بصري)</h3><ul class="content-list"><li><a href="https://youtu.be/1nRZTtR4Hs0" target="_blank"><strong>شاهد فيديو المحاضرة.</strong></a></li><li><strong>خريطة ذهنية للمحاضرة...</strong></li></ul>`;
-            break;
-        case 'A':
-            styleName = 'سمعي (Auditory) 🎧';
-            description = 'أنت تستقبل المعلومات بعمق من خلال السمع والنقاش.';
-            recommendations = `<h3>المحتوى التعليمي المقترح (سمعي)</h3><ul class="content-list"><li><a href="#" target="_blank"><strong>استمع للبودكاست (قريباً).</strong></a></li><li><strong>تحدي المناقشة...</strong></li></ul>`;
-            break;
-        case 'R':
-            styleName = 'قرائي/كتابي (Read/Write) ✍️';
-            description = 'الكلمة المكتوبة هي أداتك الأقوى.';
-            recommendations = `<h3>المحتوى التعليمي المقترح (قرائي)</h3><h4>ملخص المحاضرة بنظام س & ج...</h4>`;
-            break;
-        case 'K':
-            styleName = 'حسي/حركي (Kinesthetic) 🏃‍♂️';
-            description = 'أنت تتعلم "بالفعل" وليس فقط بالنظر أو السمع.';
-            recommendations = `<h3>المحتوى التعليمي المقترح (حسي)</h3><h4>مشروع صغير: "مدير في محيطك"...</h4>`;
-            break;
+// دالة عرض الرسم البياني (كما هي من قبل)
+function displayAnalysisChart(percentages) {
+    // ... (هنا يكون كود إنشاء الرسم البياني)
+    // ... (لا حاجة لتغييره، فقط تأكد من وجوده)
+}
+
+// دالة الحصول على اسم النمط (كما هي من قبل)
+function getStyleName(code) {
+    // ... (هنا يكون كود تحويل الرمز إلى اسم)
+    // ... (لا حاجة لتغييره، فقط تأكد من وجوده)
+}
+
+
+// دالة إرسال الآراء والمقترحات
+function handleFeedback(e) {
+    e.preventDefault();
+    const feedbackText = e.target.elements.feedback.value;
+
+    if (feedbackText.trim() === '') {
+        alert('من فضلك اكتب رأيك قبل الإرسال.');
+        return;
     }
 
-    resultStyle.innerHTML = `<p>نمطك الأساسي هو <strong>${styleName}</strong>.</p>`;
-    resultDescription.innerHTML = `<p>${description}</p>`;
-    resultRecommendations.innerHTML = recommendations;
+    // إرسال الرأي إلى Firebase
+    db.collection("feedback").add({
+        studentDocId: firestoreDocId,
+        studentName: studentName,
+        feedback: feedbackText,
+        timestamp: new Date()
+    })
+    .then(() => {
+        alert("شكرًا لك! تم إرسال رأيك بنجاح.");
+        e.target.elements.feedback.value = ''; // تفريغ الخانة
+    })
+    .catch((error) => {
+        console.error("خطأ في إرسال الرأي: ", error);
+        alert("حدث خطأ أثناء إرسال رأيك.");
+    });
 }

@@ -48,8 +48,8 @@
 
             <div id="feedback-box">
                 <h3><i class="fas fa-comments"></i> يهمنا رأيك!</h3>
-                <form id="feedback-form" action="mailto:your-email@example.com" method="post" enctype="text/plain">
-                    <textarea name="feedback" placeholder="اكتب رأيك أو مقترحاتك لتحسين التجربة..." rows="4"></textarea>
+                <form id="feedback-form">
+                    <textarea name="feedback" placeholder="اكتب رأيك أو مقترحاتك لتحسين التجربة..." rows="4" required></textarea>
                     <button type="submit" class="btn">إرسال الرأي</button>
                 </form>
             </div>
@@ -62,6 +62,27 @@
         <i class="fab fa-whatsapp"></i>
     </a>
 
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+    <script>
+      // =======================================================
+      // ===  !! مهم جدًا: الصق كود Firebase الخاص بك هنا  !!  ===
+      // =======================================================
+      // const firebaseConfig = {
+      //   apiKey: "AIzaSy...",
+      //   authDomain: "your-project-id.firebaseapp.com",
+      //   projectId: "your-project-id",
+      //   storageBucket: "your-project-id.appspot.com",
+      //   messagingSenderId: "...",
+      //   appId: "..."
+      // };
+
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+      const db = firebase.firestore();
+    </script>
+    
     <script src="questions.js"></script>
     <script src="script.js"></script>
 </body>

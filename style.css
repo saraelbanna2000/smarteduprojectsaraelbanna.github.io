@@ -1,20 +1,25 @@
-@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;800&display=swap');
 
 /* --- General Styles --- */
 :root {
     --primary-color: #007bff;
     --success-color: #28a745;
+    --dark-color: #343a40;
+    --light-color: #ffffff;
     --font-family: 'Cairo', sans-serif;
 }
 body {
     font-family: var(--font-family);
     background-color: #f4f7f9;
+    color: var(--dark-color);
+    line-height: 1.7;
     direction: rtl;
+    margin: 0;
 }
 .container {
-    background: #ffffff;
+    background: var(--light-color);
     border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
     width: 90%;
     max-width: 800px;
     margin: 2rem auto;
@@ -22,28 +27,33 @@ body {
     text-align: center;
 }
 .hide { display: none; }
-h1, h2, h3 { color: #343a40; }
+h1, h2, h3 { color: var(--dark-color); }
+h1 { font-weight: 800; }
 
 /* --- Buttons --- */
 .btn {
     background-color: var(--primary-color);
-    color: #ffffff;
+    color: var(--light-color);
     border: none;
     border-radius: 8px;
     padding: 12px 24px;
     font-size: 1.1rem;
     font-family: var(--font-family);
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, transform 0.2s;
+    font-weight: 700;
 }
-.btn:hover { background-color: #0056b3; }
+.btn:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+}
 .start-btn { background-color: var(--success-color); font-size: 1.2rem; }
 
-/* --- Login & Intro --- */
+/* --- Login & Intro & Feedback --- */
 #login-form, #feedback-form {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 1rem; /* This adds space between form elements */
     margin-top: 1.5rem;
 }
 input[type="text"], input[type="password"], textarea {
@@ -54,13 +64,14 @@ input[type="text"], input[type="password"], textarea {
     font-size: 1rem;
     text-align: right;
 }
-#welcome-message { color: var(--primary-color); }
+textarea { resize: vertical; }
+#welcome-message { color: var(--primary-color); font-size: 1.8rem; }
 
 /* --- Quiz --- */
-#question-text { font-size: 1.5rem; font-weight: bold; margin-bottom: 2rem; }
+#question-text { font-size: 1.5rem; font-weight: bold; margin-bottom: 2rem; min-height: 80px; }
 .btn-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
 
-/* --- Results, Analysis & Feedback --- */
+/* --- Results & Analysis --- */
 #result-style { text-align: right; font-size: 1.2rem; }
 #analysis-box, #feedback-box {
     margin-top: 2rem;
@@ -71,17 +82,18 @@ input[type="text"], input[type="password"], textarea {
 .chart-bar-container {
     display: flex;
     align-items: center;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.75rem;
 }
 .chart-label { width: 80px; font-weight: bold; }
 .chart-bar {
-    height: 25px;
-    line-height: 25px;
+    height: 28px;
+    line-height: 28px;
     color: white;
     padding-right: 10px;
     border-radius: 5px;
     font-size: 0.9rem;
     white-space: nowrap;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
 }
 
 /* --- WhatsApp Button --- */
@@ -89,20 +101,32 @@ input[type="text"], input[type="password"], textarea {
     position: fixed;
     width: 60px;
     height: 60px;
-    bottom: 40px;
-    left: 40px;
+    bottom: 20px; /* Adjusted for better position */
+    right: 20px; /* Positioned to the right for RTL layout */
     background-color: #25d366;
     color: #FFF;
     border-radius: 50px;
     text-align: center;
     font-size: 30px;
-    box-shadow: 2px 2px 3px #999;
+    box-shadow: 2px 2px 5px #999;
     z-index: 100;
-    line-height: 60px; /* For vertical alignment */
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-/* --- Responsive --- */
+/* --- Responsive for Mobile --- */
 @media (max-width: 768px) {
-    .btn-grid { grid-template-columns: 1fr; }
-    .whatsapp-float { width: 50px; height: 50px; line-height: 50px; bottom: 20px; left: 20px; }
+    .container {
+        padding: 1.5rem;
+    }
+    .btn-grid {
+        grid-template-columns: 1fr;
+    }
+    .whatsapp-float {
+        width: 50px;
+        height: 50px;
+        bottom: 15px;
+        right: 15px;
+    }
 }
