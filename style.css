@@ -1,0 +1,122 @@
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap');
+
+:root {
+    --primary-color: #007bff;
+    --dark-color: #343a40;
+    --light-color: #ffffff;
+    --success-color: #28a745;
+    --font-family: 'Cairo', sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: var(--font-family);
+    background-color: #eef5f9;
+    color: var(--dark-color);
+    line-height: 1.6;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    direction: rtl;
+}
+
+.container {
+    background: var(--light-color);
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 800px;
+    overflow: hidden;
+    text-align: center;
+    padding: 2rem;
+}
+
+header {
+    padding: 1.5rem;
+    border-bottom: 1px solid #eee;
+}
+
+header h1 {
+    color: var(--primary-color);
+    font-size: 2.5rem;
+}
+
+header p {
+    font-size: 1.1rem;
+    color: #6c757d;
+    margin-top: 0.5rem;
+}
+
+#quiz-box {
+    padding: 2rem;
+}
+
+#question-text {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 2rem;
+}
+
+.btn-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+.btn {
+    background-color: var(--primary-color);
+    color: var(--light-color);
+    border: none;
+    border-radius: 8px;
+    padding: 15px;
+    font-size: 1.1rem;
+    font-family: var(--font-family);
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-align: right;
+}
+
+.btn:hover {
+    background-color: #0056b3;
+}
+
+.start-btn {
+    background-color: var(--success-color);
+    color: white;
+    font-size: 1.5rem;
+    padding: 1rem 2rem;
+}
+
+#result-box {
+    padding: 2rem;
+}
+
+#result-box h2 {
+    font-size: 2rem;
+    color: var(--primary-color);
+}
+
+#result-box h3 {
+    background-color: var(--success-color);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    display: inline-block;
+    margin-bottom: 1.5rem;
+}
+
+.hide {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .btn-grid {
+        grid-template-columns: 1fr;
+    }
+}

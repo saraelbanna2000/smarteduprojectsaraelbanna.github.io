@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مُحدد نمط التعلم الذكي - Smart Edu</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="container">
+        <div id="intro-box">
+            <header>
+                <h1>Smart Edu 🎓</h1>
+                <p>مرحبًا بك في محدد نمط التعلم الذكي. سنجري اختبارًا بسيطًا لتحديد طريقتك المثلى في التعلم، ثم نوجهك للمحتوى المناسب لك.</p>
+            </header>
+            <button id="start-btn" class="btn start-btn">ابدأ الاختبار الآن</button>
+        </div>
+
+        <div id="quiz-box" class="hide">
+            <div id="question-container">
+                <div id="question-text">نص السؤال سيظهر هنا</div>
+                <div id="answer-buttons" class="btn-grid">
+                    </div>
+            </div>
+        </div>
+
+        <div id="result-box" class="hide">
+            <h2 id="result-title"></h2>
+            <h3 id="result-style"></h3>
+            <div id="result-description"></div>
+            <div id="result-recommendations"></div>
+             <button onclick="location.reload()" class="btn start-btn" style="margin-top: 20px;">إعادة الاختبار</button>
+        </div>
+    </div>
+
+    <script src="questions.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
