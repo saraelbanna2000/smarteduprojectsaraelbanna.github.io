@@ -4,35 +4,63 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>مُحدد نمط التعلم الذكي - Smart Edu</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <div class="container">
-        <div id="intro-box">
+        <div id="login-box">
             <header>
                 <h1>Smart Edu 🎓</h1>
-                <p>مرحبًا بك في محدد نمط التعلم الذكي. سنجري اختبارًا بسيطًا لتحديد طريقتك المثلى في التعلم، ثم نوجهك للمحتوى المناسب لك.</p>
+                <p>منصة تحديد نمط التعلم الذكي</p>
             </header>
-            <button id="start-btn" class="btn start-btn">ابدأ الاختبار الآن</button>
+            <form id="login-form">
+                <input type="text" id="student-name" placeholder="اكتب اسمك هنا" required>
+                <input type="password" id="student-id" placeholder="اكتب رقمك السري" required>
+                <button type="submit" class="btn start-btn">ابدأ رحلتك</button>
+            </form>
+        </div>
+
+        <div id="intro-box" class="hide">
+            <h2 id="welcome-message"></h2>
+            <p>أنت على وشك بدأ اختبار بسيط لتحديد طريقتك المثلى في التعلم، ثم سيتم توجيهك للمحتوى المناسب لك.</p>
+            <button id="start-quiz-btn" class="btn start-btn">ابدأ الاختبار الآن</button>
         </div>
 
         <div id="quiz-box" class="hide">
             <div id="question-container">
-                <div id="question-text">نص السؤال سيظهر هنا</div>
-                <div id="answer-buttons" class="btn-grid">
-                    </div>
+                <div id="question-text"></div>
+                <div id="answer-buttons" class="btn-grid"></div>
             </div>
         </div>
 
         <div id="result-box" class="hide">
             <h2 id="result-title"></h2>
-            <h3 id="result-style"></h3>
+            <div id="result-style"></div>
             <div id="result-description"></div>
             <div id="result-recommendations"></div>
-             <button onclick="location.reload()" class="btn start-btn" style="margin-top: 20px;">إعادة الاختبار</button>
+            
+            <div id="analysis-box">
+                <h3><i class="fas fa-chart-pie"></i> تحليل بياني لنتائجك</h3>
+                <div id="chart-container"></div>
+            </div>
+
+            <div id="feedback-box">
+                <h3><i class="fas fa-comments"></i> يهمنا رأيك!</h3>
+                <form id="feedback-form" action="mailto:your-email@example.com" method="post" enctype="text/plain">
+                    <textarea name="feedback" placeholder="اكتب رأيك أو مقترحاتك لتحسين التجربة..." rows="4"></textarea>
+                    <button type="submit" class="btn">إرسال الرأي</button>
+                </form>
+            </div>
+
+            <button onclick="location.reload()" class="btn start-btn" style="margin-top: 20px;">إجراء الاختبار مرة أخرى</button>
         </div>
     </div>
+
+    <a href="https://wa.me/201062124122" class="whatsapp-float" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+    </a>
 
     <script src="questions.js"></script>
     <script src="script.js"></script>
